@@ -6,17 +6,31 @@ const merge = require('webpack-merge')
 const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+const moduleList = utils.moduleCtx.moduleList || []
 
 
-Object.keys(baseWebpackConfig.entry).forEach(name=>{
-  baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
-})
+function htmlPlugin2() {
+  let { moduleList, template } = utils.moduleCtx
+  let tempArr = [];
+  for (let item of moduleList){
+    let conf = {
+      filename: `${item}/index.html`,
+      template: template[item],
+      chunks: [item],
+      inject: true
+    };
+    tempArr.push(new HtmlWebpackPlugin(conf));
+  }
+  return tempArr;
+};
+
+
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -62,12 +76,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    // new HtmlWebpackPlugin({
-    //   filename: 'index.html',
-    //   template: 'index.html',
-    //   inject: true
-    // }),
     // copy custom static assets
     new CopyWebpackPlugin([
       {
@@ -76,7 +84,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         ignore: [".*"]
       }
     ])
-  ].concat(utils.htmlPlugin())
+  ].concat(htmlPlugin2())
 });
 
 module.exports = new Promise((resolve, reject) => {
@@ -99,7 +107,6 @@ module.exports = new Promise((resolve, reject) => {
         ? utils.createNotifierCallback()
         : undefined
       }))
-
       resolve(devWebpackConfig)
     }
   })

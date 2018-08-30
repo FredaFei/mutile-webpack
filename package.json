@@ -4,12 +4,13 @@
   "description": "A Vue.js project",
   "author": "",
   "private": true,
-  "pages": "page_1",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js"
+    "clear": "rm -rf ./dist",
+    "build": "npm run clear && node build/build.js",
+    "build-all": "npm run clear && node build/build-all.js",
+    "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
     "glob": "^7.1.3",
