@@ -1,27 +1,36 @@
 const chalk = require('chalk')
 const glob = require('glob')
-
+const moduleBasePath = './src/views'
 const moduleList = []
-const moduleSrcArr = glob.sync('./src/views/*')
-
-moduleSrcArr.forEach((item)=>{
-  let moduleName= item.split('/')[3]
-  moduleList.push(moduleName)
+const allModule = glob.sync(`${moduleBasePath}/*`) //当前执行node命令时项目目录名  process.cwd()
+allModule.forEach(item=>{
+  moduleList.push(item.split('/')[3])
 })
 
-exports.moduleList = moduleList
-exports.getModuleToBuild = function () {
-  let moduleToBuild = []
-  if (process.env.NODE_ENV === 'production'){
-    if(process.env.MODULE_ENV !== 'undefined'){ // 生产环境下对指定文件打包
-      moduleToBuild = process.env.MODULE_ENV.split(',')
-    } else { // 生产环境下对所有文件打包
-      moduleToBuild = moduleList
-    }
-  }else{
-    moduleToBuild = moduleList
+exports.checkedModule = function () {
+  const currentModule = process.env.MODULE_ENV
+  const repeactModule = moduleList.filter((item,index)=>{
+    return moduleList.indexOf(item) !== index
+  })
+  if(repeactModule.length>0){
+    console.log(chalk.red('moduleList 重复了'))
+    console.log(chalk.red(repeactModule.join()))
+    return false
   }
-  return moduleToBuild
+  let illegal
+  let result = true
+  for(let item of currentModule.split(',')){
+    if(moduleList.indexOf(item) === -1){
+      result = false
+      illegal = item
+      break
+    }
+  }
+  if(result === false){
+    console.log(chalk.red('参数错误，允许的参数为：'))
+    console.log(chalk.green(moduleList.join()))
+    console.log(chalk.yellow('非法参数有：' + illegal))
+  }
+  return result
 }
-
 

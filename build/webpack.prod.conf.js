@@ -13,7 +13,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 const env = require("../config/prod.env");
 
-function getHtmlWebpackPlugins(params) {
+function getHtmlWebpackPlugins() {
   const { moduleList } = utils.moduleCtx;
   const htmlWebpackPlugins = [];
   const conf = {
