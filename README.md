@@ -1,21 +1,24 @@
-# mutil
+# mutile-webpack
 
-> A Vue.js project
+> vue + webpack 多项目独立打包
 
 ## Build Setup
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+```
+    git clone git@github.com:FredaFei/mutile-webpack.git
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+运行命令：
+
+```
+    // 开发环境
+    npm start
+    // 全部打包在一起
+    npm run build [project name] [project name]
+    // 每个项目单独打包
+    npm run build [project name] [project name] separate
+    // 打包所有项目，并每个项目单独打包
+    npm run build-all
+```
+
+博客地址： http://blog.leanote.com/post/964959033@qq.com/vue-wepeack
