@@ -13,7 +13,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 const env = require("../config/prod.env");
 
-function getHtmlWebpackPlugins() {
+function proHtmlWebpackPlugins() {
   const { moduleList } = utils.moduleCtx;
   const htmlWebpackPlugins = [];
   const conf = {
@@ -131,7 +131,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: [".*"]
       }
     ])
-  ].concat(getHtmlWebpackPlugins())
+  ].concat(proHtmlWebpackPlugins())
 });
 
 if (config.build.productionGzip) {

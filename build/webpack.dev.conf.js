@@ -12,10 +12,10 @@ const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
-const moduleList = utils.moduleCtx.moduleList || []
+const moduleList = utils.moduleCtx.moduleList
 
 
-function htmlPlugin2() {
+function devHtmlPlugin() {
   let { moduleList, template } = utils.moduleCtx
   let tempArr = [];
   for (let item of moduleList){
@@ -29,8 +29,6 @@ function htmlPlugin2() {
   }
   return tempArr;
 };
-
-
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -84,7 +82,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         ignore: [".*"]
       }
     ])
-  ].concat(htmlPlugin2())
+  ].concat(devHtmlPlugin())
 });
 
 module.exports = new Promise((resolve, reject) => {
@@ -101,7 +99,7 @@ module.exports = new Promise((resolve, reject) => {
       // Add FriendlyErrorsPlugin
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}/项目名/文件名`],
         },
         onErrors: config.dev.notifyOnErrors
         ? utils.createNotifierCallback()

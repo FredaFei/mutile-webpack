@@ -1,8 +1,6 @@
 const path = require('path')
 const execFileSync = require('child_process').execFileSync
 const { moduleList } = require("./utils").moduleCtx
-
-// const moduleList = require("./module-conf").moduleList || [];
 const buildFile = path.join(__dirname, 'build.js')
 
 console.log(moduleList);

@@ -7,8 +7,6 @@ process.env.MODE_ENV = process.argv[3];
 
 //打包前检测参数是否非法
 const checkedModule = require('./module-conf').checkedModule
-console.log(process.env.MODULE_ENV !== '')
-console.log(checkedModule())
 if(process.env.MODULE_ENV !== ''  && !checkedModule()){
   return false
 }

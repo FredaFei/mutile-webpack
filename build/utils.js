@@ -2,14 +2,9 @@
 const path = require("path");
 const config = require("../config");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const packageConfig = require("../package.json");
 const glob = require("glob");
-const merge = require("webpack-merge");
 const baseViewPath = path.resolve(__dirname, "../src/views");
 const packageViews = process.env.MODULE_ENV || '';
-console.log("packageViews");
-console.log(packageViews);
 
 /**
  * 读取入口文件和模板文件
@@ -54,35 +49,6 @@ exports.moduleCtx = moduleCtx
 
 // 多入口配置
 exports.entries = moduleCtx.entries;
-// 多出口配置
-exports.htmlPlugin = function() {
-  let moduleList = Object.entries(moduleCtx.entries);
-  let tempArr = []
-  for (let [k, v] of moduleList) {
-    let conf = {
-      filename: `index.html`,
-      template: v,
-      chunks: [k],
-      inject: true
-    };
-    if (process.env.NODE_ENV === "production") {
-      conf = merge(conf, {
-        chunks: ["manifest", "vendor", k],
-        minify: {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true
-          // more options:
-          // https://github.com/kangax/html-minifier#options-quick-reference
-        },
-        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-        chunksSortMode: "dependency"
-      });
-    }
-    tempArr.push(new HtmlWebpackPlugin(conf));
-  }
-  return tempArr;
-};
 
 exports.assetsPath = function(_path) {
   const assetsSubDirectory =
